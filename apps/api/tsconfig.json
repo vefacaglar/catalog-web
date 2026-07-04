@@ -1,0 +1,4 @@
+{
+  "extends": "@catalog/typescript-config/base.json",
+  "include": ["src", "tsup.config.ts"]
+}
