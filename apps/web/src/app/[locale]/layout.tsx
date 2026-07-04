@@ -1,5 +1,5 @@
-import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
+import { hasLocale, NextIntlClientProvider, type Locale } from 'next-intl';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
@@ -12,6 +12,18 @@ import '../globals.css';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale });
+  return {
+    title: {
+      default: t('common.siteName'),
+      template: `%s | ${t('common.siteName')}`,
+    },
+    description: t('home.heroSubtitle'),
+  };
 }
 
 export default async function LocaleLayout({

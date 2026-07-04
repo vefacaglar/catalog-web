@@ -40,3 +40,8 @@ export class ConflictError extends DomainError {
   readonly code = 'CONFLICT';
   readonly statusCode = 409;
 }
+
+export class ServiceUnavailableError extends DomainError {
+  readonly code = 'SERVICE_UNAVAILABLE';
+  readonly statusCode = 503;
+}

@@ -13,6 +13,28 @@ interface ProductDetailPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
 }
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+
+export async function generateMetadata({ params }: ProductDetailPageProps) {
+  const { locale, slug } = await params;
+  const product = await getProductBySlug(locale, slug);
+  if (!product) return {};
+
+  // hreflang: her iki dildeki slug'larla alternatifler
+  const languages = Object.fromEntries(
+    Object.entries(product.slugs).map(([loc, s]) => [loc, `${SITE_URL}/${loc}/products/${s}`]),
+  );
+
+  return {
+    title: product.name,
+    description: product.description?.slice(0, 160) ?? undefined,
+    alternates: {
+      canonical: `${SITE_URL}/${locale}/products/${product.slug}`,
+      languages,
+    },
+  };
+}
+
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);

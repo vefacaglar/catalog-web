@@ -4,6 +4,7 @@ import type { AdminCategory, AdminProduct } from '@catalog/contracts';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { ImageManager } from '@/components/admin/image-manager';
 import { ProductForm } from '@/components/admin/product-form';
 import { getProduct, listCategories } from '@/lib/admin-api';
 
@@ -31,6 +32,7 @@ export default function EditProductPage() {
     <div>
       <h1 className="mb-6 text-2xl font-bold">Ürünü Düzenle: {product.translations.tr.name}</h1>
       <ProductForm categories={categories} initial={product} />
+      <ImageManager productId={product.id} initialImages={product.images} />
     </div>
   );
 }

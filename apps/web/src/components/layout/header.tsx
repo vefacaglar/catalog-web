@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { Suspense } from 'react';
 
 import { Link } from '@/i18n/navigation';
 import { LocaleSwitcher } from '@/components/i18n/locale-switcher';
@@ -34,7 +35,10 @@ export async function Header() {
               {t('common.callUs')}
             </a>
           )}
-          <LocaleSwitcher />
+          {/* useSearchParams kullandığı için prerender'da Suspense sınırı gerekli */}
+          <Suspense fallback={null}>
+            <LocaleSwitcher />
+          </Suspense>
         </div>
       </div>
     </header>

@@ -109,3 +109,50 @@ export const updateProduct = (id: number, input: ProductUpsertInput): Promise<Ad
 
 export const deleteProduct = (id: number): Promise<{ success: boolean }> =>
   request(`/admin/products/${id}`, successSchema, { method: 'DELETE' });
+
+// --- Ürün görselleri ---
+export async function uploadProductImage(productId: number, file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await fetch(`${API_URL}/api/v1/admin/products/${productId}/images`, {
+    method: 'POST',
+    credentials: 'include',
+    body: formData,
+  });
+  const body: unknown = await res.json().catch(() => null);
+  if (!res.ok) {
+    const message =
+      body !== null && typeof body === 'object' && 'message' in body
+        ? String((body as { message: unknown }).message)
+        : `Yükleme başarısız (${res.status})`;
+    throw new AdminApiError(res.status, message);
+  }
+  return body;
+}
+
+export const reorderProductImages = (
+  productId: number,
+  imageIds: number[],
+): Promise<{ success: boolean }> =>
+  request(`/admin/products/${productId}/images/order`, successSchema, {
+    method: 'PATCH',
+    body: JSON.stringify({ imageIds }),
+  });
+
+export const updateImageAlt = (
+  productId: number,
+  imageId: number,
+  alt: { altTr: string | null; altEn: string | null },
+): Promise<{ success: boolean }> =>
+  request(`/admin/products/${productId}/images/${imageId}/alt`, successSchema, {
+    method: 'PATCH',
+    body: JSON.stringify(alt),
+  });
+
+export const deleteProductImage = (
+  productId: number,
+  imageId: number,
+): Promise<{ success: boolean }> =>
+  request(`/admin/products/${productId}/images/${imageId}`, successSchema, {
+    method: 'DELETE',
+  });
