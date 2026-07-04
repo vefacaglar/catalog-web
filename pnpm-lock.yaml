@@ -38,6 +38,9 @@ importers:
       argon2:
         specifier: ^0.44.0
         version: 0.44.0
+      drizzle-orm:
+        specifier: ^0.44.7
+        version: 0.44.7(postgres@3.4.9)
       fastify:
         specifier: ^5.0.0
         version: 5.9.0
@@ -60,6 +63,9 @@ importers:
       '@catalog/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      '@types/node':
+        specifier: ^22.20.0
+        version: 22.20.0
       eslint:
         specifier: ^9.20.0
         version: 9.39.4(jiti@2.7.0)
@@ -93,6 +99,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.7(react@19.2.7)
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@catalog/eslint-config':
         specifier: workspace:*
@@ -156,6 +165,9 @@ importers:
       '@catalog/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.20.0
+        version: 22.20.0
       argon2:
         specifier: ^0.44.0
         version: 0.44.0

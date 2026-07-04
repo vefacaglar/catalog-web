@@ -1,0 +1,50 @@
+{
+  "common": {
+    "siteName": "Catalog",
+    "callUs": "Call Us",
+    "whatsapp": "WhatsApp",
+    "loading": "Loading...",
+    "phone": "Phone"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "categories": "Categories"
+  },
+  "home": {
+    "featuredTitle": "Featured Products",
+    "categoriesTitle": "Categories",
+    "heroTitle": "Our Product Catalog",
+    "heroSubtitle": "Browse our products and call us for details and pricing.",
+    "browseProducts": "All Products"
+  },
+  "products": {
+    "title": "Products",
+    "allCategories": "All Categories",
+    "searchPlaceholder": "Search products...",
+    "search": "Search",
+    "empty": "No products match your search.",
+    "resultCount": "{count} products found"
+  },
+  "product": {
+    "sku": "SKU",
+    "contactTitle": "Interested in this product?",
+    "contactSubtitle": "Contact us for pricing and availability.",
+    "whatsappMessage": "Hello, I would like to get information about {name}: {url}",
+    "noImage": "No image"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page} / {total}"
+  },
+  "footer": {
+    "contact": "Contact",
+    "rights": "All rights reserved."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for may have been moved or removed.",
+    "backHome": "Back to home"
+  }
+}

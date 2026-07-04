@@ -1,0 +1,50 @@
+{
+  "common": {
+    "siteName": "Katalog",
+    "callUs": "Bizi Arayın",
+    "whatsapp": "WhatsApp",
+    "loading": "Yükleniyor...",
+    "phone": "Telefon"
+  },
+  "nav": {
+    "home": "Ana Sayfa",
+    "products": "Ürünler",
+    "categories": "Kategoriler"
+  },
+  "home": {
+    "featuredTitle": "Öne Çıkan Ürünler",
+    "categoriesTitle": "Kategoriler",
+    "heroTitle": "Ürün Kataloğumuz",
+    "heroSubtitle": "Ürünlerimizi inceleyin, detaylı bilgi ve fiyat için bizi arayın.",
+    "browseProducts": "Tüm Ürünler"
+  },
+  "products": {
+    "title": "Ürünler",
+    "allCategories": "Tüm Kategoriler",
+    "searchPlaceholder": "Ürün ara...",
+    "search": "Ara",
+    "empty": "Aramanızla eşleşen ürün bulunamadı.",
+    "resultCount": "{count} ürün bulundu"
+  },
+  "product": {
+    "sku": "Ürün Kodu",
+    "contactTitle": "Bu ürünle ilgileniyor musunuz?",
+    "contactSubtitle": "Fiyat ve stok bilgisi için bizimle iletişime geçin.",
+    "whatsappMessage": "Merhaba, {name} hakkında bilgi almak istiyorum: {url}",
+    "noImage": "Görsel yok"
+  },
+  "pagination": {
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "page": "Sayfa {page} / {total}"
+  },
+  "footer": {
+    "contact": "İletişim",
+    "rights": "Tüm hakları saklıdır."
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "description": "Aradığınız sayfa taşınmış veya kaldırılmış olabilir.",
+    "backHome": "Ana sayfaya dön"
+  }
+}

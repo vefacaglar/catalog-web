@@ -21,6 +21,7 @@
   "devDependencies": {
     "@catalog/eslint-config": "workspace:*",
     "@catalog/typescript-config": "workspace:*",
+    "@types/node": "^22.20.0",
     "argon2": "^0.44.0",
     "dotenv": "^16.4.0",
     "drizzle-kit": "^0.31.0",
