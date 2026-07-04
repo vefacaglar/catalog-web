@@ -14,7 +14,7 @@ export class CategoryTranslation {
 
   constructor(props: CategoryTranslationProps) {
     if (!props.name.trim()) {
-      throw new ValidationError('Kategori adı boş olamaz');
+      throw new ValidationError('Category name cannot be empty');
     }
     this.name = props.name.trim();
     this.slug = props.slug;

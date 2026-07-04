@@ -1,14 +1,9 @@
 import type { FastifyInstance } from 'fastify';
 
-/**
- * Catalog event'lerini web uygulamasının cache revalidation endpoint'ine köprüler.
- * Handler hatası iş akışını etkilemez (dispatcher loglayıp yutar); web tarafındaki
- * 300 sn'lik revalidate penceresi güvenlik ağıdır.
- */
 export function registerRevalidationWebhook(app: FastifyInstance): void {
   const { REVALIDATE_URL, REVALIDATE_SECRET } = app.config;
   if (!REVALIDATE_URL || !REVALIDATE_SECRET) {
-    app.log.warn('REVALIDATE_URL/SECRET tanımsız — revalidation webhook devre dışı');
+    app.log.warn('REVALIDATE_URL/SECRET not set — revalidation webhook disabled');
     return;
   }
 
@@ -22,9 +17,9 @@ export function registerRevalidationWebhook(app: FastifyInstance): void {
       body: JSON.stringify({ tags }),
     });
     if (!res.ok) {
-      throw new Error(`Revalidate isteği başarısız: ${res.status}`);
+      throw new Error(`Revalidate request failed: ${res.status}`);
     }
-    app.log.info({ tags }, 'Web cache revalidate edildi');
+    app.log.info({ tags }, 'Web cache revalidated');
   };
 
   const productEvents = [
@@ -44,7 +39,6 @@ export function registerRevalidationWebhook(app: FastifyInstance): void {
     'catalog.category.deleted',
   ];
   for (const name of categoryEvents) {
-    // Kategori değişimi ürün listelerindeki kategori adlarını da etkiler
     app.events.subscribe(name, () => notify(['categories', 'products']));
   }
 }

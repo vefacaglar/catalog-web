@@ -1,11 +1,13 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 
 import { AdminApiError, login } from '@/lib/admin-api';
 
 export default function AdminLoginPage() {
+  const t = useTranslations('admin.login');
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,13 +21,13 @@ export default function AdminLoginPage() {
     try {
       const user = await login({ email, password });
       if (user.role !== 'admin') {
-        setError('Bu hesabın yönetim paneline erişim yetkisi yok');
+        setError(t('noAccess'));
         return;
       }
       router.push('/admin/products');
       router.refresh();
     } catch (err) {
-      setError(err instanceof AdminApiError ? err.message : 'Giriş yapılamadı');
+      setError(err instanceof AdminApiError ? err.message : t('failed'));
     } finally {
       setBusy(false);
     }
@@ -37,11 +39,11 @@ export default function AdminLoginPage() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm"
       >
-        <h1 className="text-xl font-bold">Yönetim Paneli</h1>
-        <p className="mt-1 text-sm text-zinc-500">Devam etmek için giriş yapın</p>
+        <h1 className="text-xl font-bold">{t('title')}</h1>
+        <p className="mt-1 text-sm text-zinc-500">{t('subtitle')}</p>
 
         <label className="mt-6 block text-sm font-medium">
-          E-posta
+          {t('email')}
           <input
             type="email"
             value={email}
@@ -52,7 +54,7 @@ export default function AdminLoginPage() {
         </label>
 
         <label className="mt-4 block text-sm font-medium">
-          Şifre
+          {t('password')}
           <input
             type="password"
             value={password}
@@ -70,7 +72,7 @@ export default function AdminLoginPage() {
           disabled={busy}
           className="mt-6 w-full rounded-lg bg-zinc-900 py-2.5 text-sm font-semibold text-white hover:bg-zinc-700 disabled:opacity-50"
         >
-          {busy ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+          {busy ? t('submitting') : t('submit')}
         </button>
       </form>
     </div>

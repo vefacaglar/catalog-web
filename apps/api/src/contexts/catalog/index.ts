@@ -20,10 +20,6 @@ import { DrizzleProductRepository } from './infrastructure/drizzle-product.repos
 import { buildAdminRoutes } from './presentation/admin.routes.js';
 import { buildPublicRoutes } from './presentation/public.routes.js';
 
-/**
- * Catalog bounded context composition root'u.
- * Bağımlılıklar burada kurulur; route'lar yalnızca application katmanını görür.
- */
 export async function registerCatalogContext(
   app: FastifyInstance,
   imageStorage: ImageStoragePort,

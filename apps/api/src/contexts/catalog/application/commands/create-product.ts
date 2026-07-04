@@ -20,7 +20,7 @@ export class CreateProduct implements UseCase<ProductUpsertInput, AdminProduct> 
   async execute(input: ProductUpsertInput): Promise<AdminProduct> {
     const category = await this.categories.findById(input.categoryId);
     if (!category) {
-      throw new NotFoundError(`Kategori bulunamadı: ${input.categoryId}`);
+      throw new NotFoundError(`Category not found: ${input.categoryId}`);
     }
 
     const translations = await buildProductTranslations(input.translations, this.products);
@@ -37,7 +37,7 @@ export class CreateProduct implements UseCase<ProductUpsertInput, AdminProduct> 
     await this.events.dispatch(product.pullDomainEvents());
 
     const dto = await this.queryService.getAdminProduct(product.persistedId);
-    if (!dto) throw new Error('Ürün oluşturuldu ama okunamadı');
+    if (!dto) throw new Error('Product was created but could not be read back');
     return dto;
   }
 }

@@ -30,7 +30,7 @@ async function fetchApi<T extends z.ZodType>(
     throw new ApiNotFoundError(path);
   }
   if (!res.ok) {
-    throw new Error(`API hatası: ${res.status} ${path}`);
+    throw new Error(`API error: ${res.status} ${path}`);
   }
   return schema.parse(await res.json());
 }

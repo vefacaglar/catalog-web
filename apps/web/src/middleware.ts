@@ -10,8 +10,6 @@ const SESSION_COOKIE = 'catalog_session';
 export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // /admin locale routing dışında; UX için cookie yoksa login'e yönlendir.
-  // Gerçek yetki kontrolü API'dedir.
   if (pathname.startsWith('/admin')) {
     const hasSession = request.cookies.has(SESSION_COOKIE);
     if (!hasSession && pathname !== '/admin/login') {

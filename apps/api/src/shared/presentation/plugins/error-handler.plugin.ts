@@ -11,7 +11,7 @@ export const errorHandlerPlugin = fp(
           statusCode: 400,
           code: 'VALIDATION_ERROR',
           message: err.validation
-            .map((v) => `${v.instancePath || 'body'}: ${v.message ?? 'geçersiz değer'}`)
+            .map((v) => `${v.instancePath || 'body'}: ${v.message ?? 'invalid value'}`)
             .join('; '),
         });
       }
@@ -24,13 +24,12 @@ export const errorHandlerPlugin = fp(
         });
       }
 
-      // Fastify'ın kendi hataları (404, body limit vb.) statusCode taşır
       const fastifyErr = err as { statusCode?: number; code?: string; message?: string };
       if (typeof fastifyErr.statusCode === 'number' && fastifyErr.statusCode < 500) {
         return reply.status(fastifyErr.statusCode).send({
           statusCode: fastifyErr.statusCode,
           code: fastifyErr.code ?? 'REQUEST_ERROR',
-          message: fastifyErr.message ?? 'İstek hatası',
+          message: fastifyErr.message ?? 'Request error',
         });
       }
 
@@ -38,7 +37,7 @@ export const errorHandlerPlugin = fp(
       return reply.status(500).send({
         statusCode: 500,
         code: 'INTERNAL_ERROR',
-        message: 'Beklenmeyen bir hata oluştu',
+        message: 'An unexpected error occurred',
       });
     });
 
@@ -46,7 +45,7 @@ export const errorHandlerPlugin = fp(
       reply.status(404).send({
         statusCode: 404,
         code: 'NOT_FOUND',
-        message: 'Kaynak bulunamadı',
+        message: 'Resource not found',
       });
     });
   },

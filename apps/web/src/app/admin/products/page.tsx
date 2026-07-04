@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminProduct } from '@catalog/contracts';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -8,6 +9,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { AdminApiError, deleteProduct, listProducts } from '@/lib/admin-api';
 
 export default function AdminProductsPage() {
+  const t = useTranslations('admin.products');
+  const tc = useTranslations('admin.common');
   const router = useRouter();
   const [products, setProducts] = useState<AdminProduct[] | null>(null);
   const [search, setSearch] = useState('');
@@ -27,10 +30,10 @@ export default function AdminProductsPage() {
           router.push('/admin/login');
           return;
         }
-        setError(err instanceof Error ? err.message : 'Yüklenemedi');
+        setError(err instanceof Error ? err.message : tc('loadFailed'));
       }
     },
-    [router],
+    [router, tc],
   );
 
   useEffect(() => {
@@ -38,26 +41,26 @@ export default function AdminProductsPage() {
   }, [load, page, search]);
 
   async function handleDelete(product: AdminProduct) {
-    if (!confirm(`"${product.translations.tr.name}" silinsin mi? Bu işlem geri alınamaz.`)) {
+    if (!confirm(t('deleteConfirm', { name: product.translations.tr.name }))) {
       return;
     }
     try {
       await deleteProduct(product.id);
       await load({ page, search: search || undefined });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Silinemedi');
+      setError(err instanceof Error ? err.message : tc('deleteFailed'));
     }
   }
 
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Ürünler</h1>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
         <Link
           href="/admin/products/new"
           className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-700"
         >
-          + Yeni Ürün
+          {t('new')}
         </Link>
       </div>
 
@@ -68,24 +71,24 @@ export default function AdminProductsPage() {
           setSearch(e.target.value);
           setPage(1);
         }}
-        placeholder="Ürün ara..."
+        placeholder={t('searchPlaceholder')}
         className="mt-4 w-full max-w-sm rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm"
       />
 
       {error && <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
 
       {products === null ? (
-        <p className="mt-8 text-sm text-zinc-500">Yükleniyor...</p>
+        <p className="mt-8 text-sm text-zinc-500">{tc('loading')}</p>
       ) : (
         <div className="mt-4 overflow-hidden rounded-xl border border-zinc-200 bg-white">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-500">
               <tr>
-                <th className="px-4 py-3">Ad (TR)</th>
-                <th className="px-4 py-3">SKU</th>
-                <th className="px-4 py-3">Durum</th>
-                <th className="px-4 py-3">Görsel</th>
-                <th className="px-4 py-3 text-right">İşlem</th>
+                <th className="px-4 py-3">{t('nameTr')}</th>
+                <th className="px-4 py-3">{t('sku')}</th>
+                <th className="px-4 py-3">{tc('status')}</th>
+                <th className="px-4 py-3">{t('images')}</th>
+                <th className="px-4 py-3 text-right">{tc('actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -95,16 +98,16 @@ export default function AdminProductsPage() {
                     {product.translations.tr.name}
                     {product.isFeatured && (
                       <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-800">
-                        Öne çıkan
+                        {t('featuredBadge')}
                       </span>
                     )}
                   </td>
                   <td className="px-4 py-3 font-mono text-xs">{product.sku ?? '—'}</td>
                   <td className="px-4 py-3">
                     {product.isActive ? (
-                      <span className="text-emerald-600">Aktif</span>
+                      <span className="text-emerald-600">{tc('active')}</span>
                     ) : (
-                      <span className="text-zinc-400">Pasif</span>
+                      <span className="text-zinc-400">{tc('inactive')}</span>
                     )}
                   </td>
                   <td className="px-4 py-3">{product.images.length}</td>
@@ -113,13 +116,13 @@ export default function AdminProductsPage() {
                       href={`/admin/products/${product.id}`}
                       className="font-semibold text-blue-600 hover:underline"
                     >
-                      Düzenle
+                      {tc('edit')}
                     </Link>
                     <button
                       onClick={() => handleDelete(product)}
                       className="ml-4 font-semibold text-red-600 hover:underline"
                     >
-                      Sil
+                      {tc('delete')}
                     </button>
                   </td>
                 </tr>
@@ -127,7 +130,7 @@ export default function AdminProductsPage() {
               {products.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-zinc-500">
-                    Ürün bulunamadı
+                    {t('empty')}
                   </td>
                 </tr>
               )}
@@ -143,17 +146,15 @@ export default function AdminProductsPage() {
             onClick={() => setPage((p) => p - 1)}
             className="rounded border bg-white px-3 py-1.5 disabled:opacity-40"
           >
-            ← Önceki
+            ← {tc('previous')}
           </button>
-          <span>
-            Sayfa {page} / {totalPages}
-          </span>
+          <span>{tc('page', { page, total: totalPages })}</span>
           <button
             disabled={page >= totalPages}
             onClick={() => setPage((p) => p + 1)}
             className="rounded border bg-white px-3 py-1.5 disabled:opacity-40"
           >
-            Sonraki →
+            {tc('next')} →
           </button>
         </div>
       )}

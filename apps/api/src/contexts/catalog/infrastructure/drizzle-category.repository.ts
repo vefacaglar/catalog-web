@@ -24,7 +24,7 @@ export class DrizzleCategoryRepository implements CategoryRepository {
     const tr = translations.find((t) => t.locale === 'tr');
     const en = translations.find((t) => t.locale === 'en');
     if (!tr || !en) {
-      throw new Error(`Kategori ${id} için TR/EN çeviri satırları eksik`);
+      throw new Error(`Category ${id} is missing TR/EN translation rows`);
     }
 
     return Category.reconstitute(row.id, {
@@ -61,7 +61,7 @@ export class DrizzleCategoryRepository implements CategoryRepository {
         const [inserted] = await tx.insert(categories).values(values).returning({
           id: categories.id,
         });
-        if (!inserted) throw new Error('Kategori eklenemedi');
+        if (!inserted) throw new Error('Failed to insert category');
         category.bindId(inserted.id);
       } else {
         await tx.update(categories).set(values).where(eq(categories.id, category.id));

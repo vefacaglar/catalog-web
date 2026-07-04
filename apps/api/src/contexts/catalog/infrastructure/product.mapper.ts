@@ -18,7 +18,7 @@ export function toProductAggregate(
   const tr = translationRows.find((t) => t.locale === 'tr');
   const en = translationRows.find((t) => t.locale === 'en');
   if (!tr || !en) {
-    throw new Error(`Ürün ${row.id} için TR/EN çeviri satırları eksik`);
+    throw new Error(`Product ${row.id} is missing TR/EN translation rows`);
   }
 
   return Product.reconstitute(row.id, {

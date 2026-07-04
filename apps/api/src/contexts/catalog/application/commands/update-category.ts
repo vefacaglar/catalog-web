@@ -21,14 +21,14 @@ export class UpdateCategory implements UseCase<UpdateCategoryInput, AdminCategor
   async execute(input: UpdateCategoryInput): Promise<AdminCategory> {
     const category = await this.categories.findById(input.categoryId);
     if (!category) {
-      throw new NotFoundError(`Kategori bulunamadı: ${input.categoryId}`);
+      throw new NotFoundError(`Category not found: ${input.categoryId}`);
     }
 
     const parentId = input.parentId ?? null;
     if (parentId !== null) {
       const parent = await this.categories.findById(parentId);
       if (!parent) {
-        throw new NotFoundError(`Üst kategori bulunamadı: ${parentId}`);
+        throw new NotFoundError(`Parent category not found: ${parentId}`);
       }
       await this.assertNoCycle(input.categoryId, parentId);
     }
@@ -51,18 +51,17 @@ export class UpdateCategory implements UseCase<UpdateCategoryInput, AdminCategor
     const dto = (await this.queryService.listAdminCategories()).find(
       (c) => c.id === category.persistedId,
     );
-    if (!dto) throw new Error('Kategori güncellendi ama okunamadı');
+    if (!dto) throw new Error('Category was updated but could not be read back');
     return dto;
   }
 
-  /** Kategori kendi alt ağacına taşınamaz (döngü invariantı) */
   private async assertNoCycle(categoryId: number, newParentId: number): Promise<void> {
     const refs = await this.categories.findAllRefs();
     const parentOf = new Map(refs.map((r) => [r.id, r.parentId]));
     let current: number | null = newParentId;
     while (current !== null) {
       if (current === categoryId) {
-        throw new ValidationError('Kategori kendi alt kategorisine taşınamaz');
+        throw new ValidationError('A category cannot be moved under its own subtree');
       }
       current = parentOf.get(current) ?? null;
     }

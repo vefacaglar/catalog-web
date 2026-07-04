@@ -17,11 +17,10 @@ export class RemoveProductImage implements UseCase<RemoveProductImageInput, void
   async execute({ productId, imageId }: RemoveProductImageInput): Promise<void> {
     const product = await this.products.findById(productId);
     if (!product) {
-      throw new NotFoundError(`Ürün bulunamadı: ${productId}`);
+      throw new NotFoundError(`Product not found: ${productId}`);
     }
     product.removeImage(imageId);
     await this.products.save(product);
-    // Commit sonrası: media context ProductImageRemoved ile sağlayıcıdan siler
     await this.events.dispatch(product.pullDomainEvents());
   }
 }

@@ -10,7 +10,6 @@ const envSchema = z.object({
   WEB_ORIGIN: z.string().url().default('http://localhost:3000'),
   REVALIDATE_URL: z.string().url().optional(),
   REVALIDATE_SECRET: z.string().optional(),
-  // ImageKit anahtarları Faz 6'ya kadar opsiyonel; eksikse upload endpoint'i 503 döner
   IMAGEKIT_PUBLIC_KEY: z.string().optional(),
   IMAGEKIT_PRIVATE_KEY: z.string().optional(),
   IMAGEKIT_URL_ENDPOINT: z.string().url().optional(),
@@ -19,8 +18,6 @@ const envSchema = z.object({
 export type AppConfig = z.infer<typeof envSchema>;
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
-  // .env'de "KEY=" olarak bırakılan değerler boş string gelir; opsiyonel alanlar
-  // için bunlar tanımsız sayılmalı
   const cleaned = Object.fromEntries(
     Object.entries(env).filter(([, value]) => value !== ''),
   );
@@ -29,7 +26,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     const issues = parsed.error.issues
       .map((issue) => `  ${issue.path.join('.')}: ${issue.message}`)
       .join('\n');
-    throw new Error(`Gecersiz ortam degiskenleri:\n${issues}`);
+    throw new Error(`Invalid environment variables:\n${issues}`);
   }
   return parsed.data;
 }

@@ -1,9 +1,6 @@
 import { ValidationError } from '../../../../shared/domain/errors.js';
 import { LOCALES, type Locale } from './locale.js';
 
-/**
- * Her locale için bir çeviri barındırır; TR ve EN'in ikisi de zorunludur.
- */
 export class TranslationSet<T> {
   private constructor(private readonly map: ReadonlyMap<Locale, T>) {}
 
@@ -12,7 +9,7 @@ export class TranslationSet<T> {
     for (const locale of LOCALES) {
       const value = entries[locale];
       if (value === undefined || value === null) {
-        throw new ValidationError(`"${locale}" çevirisi zorunlu`);
+        throw new ValidationError(`Translation for "${locale}" is required`);
       }
       map.set(locale, value);
     }
@@ -22,7 +19,7 @@ export class TranslationSet<T> {
   get(locale: Locale): T {
     const value = this.map.get(locale);
     if (value === undefined) {
-      throw new ValidationError(`"${locale}" çevirisi bulunamadı`);
+      throw new ValidationError(`Translation for "${locale}" not found`);
     }
     return value;
   }

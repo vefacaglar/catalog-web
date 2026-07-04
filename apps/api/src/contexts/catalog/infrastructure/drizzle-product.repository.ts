@@ -27,7 +27,6 @@ export class DrizzleProductRepository implements ProductRepository {
     return toProductAggregate(row, translations, images);
   }
 
-  /** Aggregate tek transaction'da persist edilir; yeni entity id'leri bağlanır. */
   async save(product: Product): Promise<void> {
     await this.db.transaction(async (tx) => {
       const values = {
@@ -43,11 +42,10 @@ export class DrizzleProductRepository implements ProductRepository {
         const [inserted] = await tx.insert(products).values(values).returning({
           id: products.id,
         });
-        if (!inserted) throw new Error('Ürün eklenemedi');
+        if (!inserted) throw new Error('Failed to insert product');
         product.bindId(inserted.id);
       } else {
         await tx.update(products).set(values).where(eq(products.id, product.id));
-        // Çeviriler tam replace edilir (aggregate her iki locale'i de taşır)
         await tx
           .delete(productTranslations)
           .where(eq(productTranslations.productId, product.id));
@@ -65,8 +63,6 @@ export class DrizzleProductRepository implements ProductRepository {
         })),
       );
 
-      // Görseller: DB'deki id'lerden aggregate'te olmayanları sil,
-      // mevcutları güncelle, yenileri ekle
       const keptIds = product.images
         .map((img) => img.id)
         .filter((id): id is number => id !== null);
@@ -94,7 +90,7 @@ export class DrizzleProductRepository implements ProductRepository {
               height: image.height,
             })
             .returning({ id: productImages.id });
-          if (!inserted) throw new Error('Görsel eklenemedi');
+          if (!inserted) throw new Error('Failed to insert image');
           image.bindId(inserted.id);
         } else {
           await tx
@@ -111,7 +107,6 @@ export class DrizzleProductRepository implements ProductRepository {
   }
 
   async delete(product: Product): Promise<void> {
-    // Çeviriler ve görseller cascade ile silinir
     await this.db.delete(products).where(eq(products.id, product.persistedId));
   }
 

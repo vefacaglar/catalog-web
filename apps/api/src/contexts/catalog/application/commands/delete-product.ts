@@ -12,11 +12,10 @@ export class DeleteProduct implements UseCase<{ productId: number }, void> {
   async execute({ productId }: { productId: number }): Promise<void> {
     const product = await this.products.findById(productId);
     if (!product) {
-      throw new NotFoundError(`Ürün bulunamadı: ${productId}`);
+      throw new NotFoundError(`Product not found: ${productId}`);
     }
     product.markDeleted();
     await this.products.delete(product);
-    // ProductDeleted event'i görsel externalId'lerini taşır — media temizliği handler'da
     await this.events.dispatch(product.pullDomainEvents());
   }
 }

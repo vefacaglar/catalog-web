@@ -24,7 +24,7 @@ export class InProcessEventDispatcher implements DomainEventDispatcher {
         try {
           await handler(event);
         } catch (err) {
-          this.logger.error({ err, event: event.name }, 'Domain event handler hatasi');
+          this.logger.error({ err, event: event.name }, 'Domain event handler failed');
         }
       }
     }

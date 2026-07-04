@@ -30,7 +30,6 @@ export class DrizzleCatalogQueryService implements CatalogQueryService {
   async listProducts(query: ProductListQuery): Promise<ProductList> {
     const { locale, page, pageSize } = query;
 
-    // Kategori filtresi: slug'dan id + tüm alt kategori id'leri
     let categoryIds: number[] | null = null;
     if (query.category) {
       const [cat] = await this.db

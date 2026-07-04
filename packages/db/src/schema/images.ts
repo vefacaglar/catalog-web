@@ -9,13 +9,10 @@ export const productImages = pgTable(
     productId: integer('product_id')
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    // Depolama sağlayıcısındaki dosya yolu; tam URL sunum katmanında kurulur
     filePath: text('file_path').notNull(),
-    // Sağlayıcının dosya kimliği (ör. ImageKit fileId) — silme işlemi için
     externalId: text('external_id'),
     altTr: text('alt_tr'),
     altEn: text('alt_en'),
-    // sortOrder 0 = kapak görseli
     sortOrder: integer('sort_order').notNull().default(0),
     width: integer('width'),
     height: integer('height'),

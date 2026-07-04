@@ -8,7 +8,6 @@ export interface ImageKitConfig {
   urlEndpoint: string;
 }
 
-/** ImageKit SDK adapter'ı — sağlayıcıya dokunan tek dosya. */
 export class ImageKitStorage implements ImageStorage {
   private readonly client: ImageKit;
 

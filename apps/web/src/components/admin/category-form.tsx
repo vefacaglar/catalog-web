@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminCategory, CategoryUpsertInput } from '@catalog/contracts';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 
@@ -22,6 +23,8 @@ interface CategoryFormProps {
 const emptyDraft: TranslationDraft = { name: '', slug: '', description: '' };
 
 export function CategoryForm({ categories, initial }: CategoryFormProps) {
+  const t = useTranslations('admin.form');
+  const tc = useTranslations('admin.common');
   const router = useRouter();
   const [tab, setTab] = useState<LocaleTab>('tr');
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +54,6 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
     setDrafts((prev) => ({ ...prev, [locale]: { ...prev[locale], ...patch } }));
   }
 
-  // Kendisi ve (basit önlem olarak) mevcut alt kategorileri üst olarak seçilemez
   const parentOptions = categories.filter(
     (c) => c.id !== initial?.id && c.parentId !== initial?.id,
   );
@@ -63,7 +65,7 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
     for (const locale of ['tr', 'en'] as const) {
       if (!drafts[locale].name.trim()) {
         setTab(locale);
-        setError(`${locale.toUpperCase()} adı zorunlu`);
+        setError(t('nameRequired', { locale: locale.toUpperCase() }));
         return;
       }
     }
@@ -88,7 +90,7 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
       router.push('/admin/categories');
       router.refresh();
     } catch (err) {
-      setError(err instanceof AdminApiError ? err.message : 'Kaydedilemedi');
+      setError(err instanceof AdminApiError ? err.message : tc('saveFailed'));
     } finally {
       setBusy(false);
     }
@@ -97,16 +99,18 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
   return (
     <form onSubmit={handleSubmit} className="max-w-3xl space-y-6">
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">Genel</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+          {t('general')}
+        </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           <label className="block text-sm font-medium">
-            Üst Kategori
+            {t('parent')}
             <select
               value={parentId ?? ''}
               onChange={(e) => setParentId(e.target.value === '' ? null : Number(e.target.value))}
               className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
             >
-              <option value="">(Ana kategori)</option>
+              <option value="">{t('rootOption')}</option>
               {parentOptions.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.translations.tr.name}
@@ -115,7 +119,7 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
             </select>
           </label>
           <label className="block text-sm font-medium">
-            Sıra
+            {t('sortOrder')}
             <input
               type="number"
               value={sortOrder}
@@ -129,14 +133,16 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
               checked={isActive}
               onChange={(e) => setIsActive(e.target.checked)}
             />
-            Aktif
+            {t('active')}
           </label>
         </div>
       </div>
 
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">İçerik</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+            {t('content')}
+          </h2>
           <div className="flex gap-1 rounded-lg bg-zinc-100 p-1">
             {(['tr', 'en'] as const).map((locale) => (
               <button
@@ -157,7 +163,7 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
 
         <div className="mt-4 space-y-4">
           <label className="block text-sm font-medium">
-            Ad ({tab.toUpperCase()})
+            {t('name', { locale: tab.toUpperCase() })}
             <input
               value={drafts[tab].name}
               onChange={(e) => setDraft(tab, { name: e.target.value })}
@@ -165,7 +171,7 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
             />
           </label>
           <label className="block text-sm font-medium">
-            Slug ({tab.toUpperCase()}) — boş bırakılırsa addan üretilir
+            {t('slug', { locale: tab.toUpperCase() })}
             <input
               value={drafts[tab].slug}
               onChange={(e) => setDraft(tab, { slug: e.target.value })}
@@ -173,7 +179,7 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
             />
           </label>
           <label className="block text-sm font-medium">
-            Açıklama ({tab.toUpperCase()})
+            {t('description', { locale: tab.toUpperCase() })}
             <textarea
               value={drafts[tab].description}
               onChange={(e) => setDraft(tab, { description: e.target.value })}
@@ -192,14 +198,14 @@ export function CategoryForm({ categories, initial }: CategoryFormProps) {
           disabled={busy}
           className="rounded-lg bg-zinc-900 px-6 py-2.5 text-sm font-semibold text-white hover:bg-zinc-700 disabled:opacity-50"
         >
-          {busy ? 'Kaydediliyor...' : initial ? 'Güncelle' : 'Oluştur'}
+          {busy ? tc('saving') : initial ? tc('update') : tc('create')}
         </button>
         <button
           type="button"
           onClick={() => router.push('/admin/categories')}
           className="rounded-lg border border-zinc-300 px-6 py-2.5 text-sm font-semibold hover:bg-zinc-50"
         >
-          Vazgeç
+          {tc('cancel')}
         </button>
       </div>
     </form>

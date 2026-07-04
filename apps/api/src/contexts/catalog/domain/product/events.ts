@@ -26,7 +26,6 @@ export class ProductDeleted extends BaseDomainEvent {
 
   constructor(
     readonly productId: number,
-    /** Depolama temizliği için silinen görsellerin sağlayıcı kimlikleri */
     readonly imageExternalIds: string[],
   ) {
     super();
@@ -51,7 +50,6 @@ export class ProductImageRemoved extends BaseDomainEvent {
 
   constructor(
     readonly product: Product,
-    /** Silinen görselin sağlayıcı kimliği — depolama temizliği için */
     readonly externalId: string | null,
   ) {
     super();

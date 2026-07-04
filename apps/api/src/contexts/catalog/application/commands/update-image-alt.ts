@@ -19,7 +19,7 @@ export class UpdateImageAlt implements UseCase<UpdateImageAltInput, void> {
   async execute({ productId, imageId, altTr, altEn }: UpdateImageAltInput): Promise<void> {
     const product = await this.products.findById(productId);
     if (!product) {
-      throw new NotFoundError(`Ürün bulunamadı: ${productId}`);
+      throw new NotFoundError(`Product not found: ${productId}`);
     }
     product.updateImageAlt(imageId, altTr, altEn);
     await this.products.save(product);

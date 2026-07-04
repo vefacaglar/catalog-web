@@ -98,7 +98,7 @@ export class Product extends AggregateRoot {
   removeImage(imageId: number): void {
     const image = this._images.find((img) => img.id === imageId);
     if (!image) {
-      throw new NotFoundError(`Görsel bulunamadı: ${imageId}`);
+      throw new NotFoundError(`Image not found: ${imageId}`);
     }
     this._images = this._images.filter((img) => img.id !== imageId);
     this.resequenceImages();
@@ -106,10 +106,6 @@ export class Product extends AggregateRoot {
     this.record(new ProductImageRemoved(this, image.externalId));
   }
 
-  /**
-   * Görselleri verilen id sırasına göre yeniden dizer.
-   * Kapak invariantı: sortOrder 0'daki görsel kapaktır; sıra değişimi kapağı da değiştirir.
-   */
   reorderImages(orderedIds: number[]): void {
     const currentIds = this._images.map((img) => img.persistedId);
     const sameSet =
@@ -117,7 +113,7 @@ export class Product extends AggregateRoot {
       [...orderedIds].sort((a, b) => a - b).join(',') ===
         [...currentIds].sort((a, b) => a - b).join(',');
     if (!sameSet) {
-      throw new ValidationError('Sıralama listesi ürünün mevcut görselleriyle eşleşmiyor');
+      throw new ValidationError("Reorder list does not match the product's current images");
     }
     this._images.sort(
       (a, b) => orderedIds.indexOf(a.persistedId) - orderedIds.indexOf(b.persistedId),
@@ -130,7 +126,7 @@ export class Product extends AggregateRoot {
   updateImageAlt(imageId: number, altTr: string | null, altEn: string | null): void {
     const image = this._images.find((img) => img.id === imageId);
     if (!image) {
-      throw new NotFoundError(`Görsel bulunamadı: ${imageId}`);
+      throw new NotFoundError(`Image not found: ${imageId}`);
     }
     image.altTr = altTr;
     image.altEn = altEn;
@@ -138,7 +134,6 @@ export class Product extends AggregateRoot {
     this.record(new ProductUpdated(this));
   }
 
-  /** Silme kararının domain kaydı; fiziksel silmeyi repository yapar. */
   markDeleted(): void {
     this.record(
       new ProductDeleted(

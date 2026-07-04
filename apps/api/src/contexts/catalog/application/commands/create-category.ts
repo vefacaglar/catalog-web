@@ -20,7 +20,7 @@ export class CreateCategory implements UseCase<CategoryUpsertInput, AdminCategor
     if (parentId !== null) {
       const parent = await this.categories.findById(parentId);
       if (!parent) {
-        throw new NotFoundError(`Üst kategori bulunamadı: ${parentId}`);
+        throw new NotFoundError(`Parent category not found: ${parentId}`);
       }
     }
 
@@ -38,7 +38,7 @@ export class CreateCategory implements UseCase<CategoryUpsertInput, AdminCategor
     const dto = (await this.queryService.listAdminCategories()).find(
       (c) => c.id === category.persistedId,
     );
-    if (!dto) throw new Error('Kategori oluşturuldu ama okunamadı');
+    if (!dto) throw new Error('Category was created but could not be read back');
     return dto;
   }
 }

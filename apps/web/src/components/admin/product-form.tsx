@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminCategory, AdminProduct, ProductUpsertInput } from '@catalog/contracts';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 
@@ -22,6 +23,8 @@ interface ProductFormProps {
 const emptyDraft: TranslationDraft = { name: '', slug: '', description: '' };
 
 export function ProductForm({ categories, initial }: ProductFormProps) {
+  const t = useTranslations('admin.form');
+  const tc = useTranslations('admin.common');
   const router = useRouter();
   const [tab, setTab] = useState<LocaleTab>('tr');
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +65,7 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
     for (const locale of ['tr', 'en'] as const) {
       if (!drafts[locale].name.trim()) {
         setTab(locale);
-        setError(`${locale.toUpperCase()} adı zorunlu`);
+        setError(t('nameRequired', { locale: locale.toUpperCase() }));
         return;
       }
     }
@@ -89,7 +92,7 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
       router.push('/admin/products');
       router.refresh();
     } catch (err) {
-      setError(err instanceof AdminApiError ? err.message : 'Kaydedilemedi');
+      setError(err instanceof AdminApiError ? err.message : tc('saveFailed'));
     } finally {
       setBusy(false);
     }
@@ -98,10 +101,12 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
   return (
     <form onSubmit={handleSubmit} className="max-w-3xl space-y-6">
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">Genel</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+          {t('general')}
+        </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className="block text-sm font-medium">
-            Kategori
+            {t('category')}
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(Number(e.target.value))}
@@ -115,7 +120,7 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
             </select>
           </label>
           <label className="block text-sm font-medium">
-            Ürün Kodu (SKU)
+            {t('sku')}
             <input
               value={sku}
               onChange={(e) => setSku(e.target.value)}
@@ -123,7 +128,7 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
             />
           </label>
           <label className="block text-sm font-medium">
-            Sıra
+            {t('sortOrder')}
             <input
               type="number"
               value={sortOrder}
@@ -138,7 +143,7 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
                 checked={isActive}
                 onChange={(e) => setIsActive(e.target.checked)}
               />
-              Aktif
+              {t('active')}
             </label>
             <label className="flex items-center gap-2 text-sm font-medium">
               <input
@@ -146,7 +151,7 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
                 checked={isFeatured}
                 onChange={(e) => setIsFeatured(e.target.checked)}
               />
-              Öne Çıkan
+              {t('featured')}
             </label>
           </div>
         </div>
@@ -154,7 +159,9 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
 
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">İçerik</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+            {t('content')}
+          </h2>
           <div className="flex gap-1 rounded-lg bg-zinc-100 p-1">
             {(['tr', 'en'] as const).map((locale) => (
               <button
@@ -175,7 +182,7 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
 
         <div className="mt-4 space-y-4">
           <label className="block text-sm font-medium">
-            Ad ({tab.toUpperCase()})
+            {t('name', { locale: tab.toUpperCase() })}
             <input
               value={drafts[tab].name}
               onChange={(e) => setDraft(tab, { name: e.target.value })}
@@ -183,16 +190,16 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
             />
           </label>
           <label className="block text-sm font-medium">
-            Slug ({tab.toUpperCase()}) — boş bırakılırsa addan üretilir
+            {t('slug', { locale: tab.toUpperCase() })}
             <input
               value={drafts[tab].slug}
               onChange={(e) => setDraft(tab, { slug: e.target.value })}
-              placeholder="ornek-urun-adi"
+              placeholder={t('slugPlaceholder')}
               className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 font-mono text-sm"
             />
           </label>
           <label className="block text-sm font-medium">
-            Açıklama ({tab.toUpperCase()})
+            {t('description', { locale: tab.toUpperCase() })}
             <textarea
               value={drafts[tab].description}
               onChange={(e) => setDraft(tab, { description: e.target.value })}
@@ -211,14 +218,14 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
           disabled={busy}
           className="rounded-lg bg-zinc-900 px-6 py-2.5 text-sm font-semibold text-white hover:bg-zinc-700 disabled:opacity-50"
         >
-          {busy ? 'Kaydediliyor...' : initial ? 'Güncelle' : 'Oluştur'}
+          {busy ? tc('saving') : initial ? tc('update') : tc('create')}
         </button>
         <button
           type="button"
           onClick={() => router.push('/admin/products')}
           className="rounded-lg border border-zinc-300 px-6 py-2.5 text-sm font-semibold hover:bg-zinc-50"
         >
-          Vazgeç
+          {tc('cancel')}
         </button>
       </div>
     </form>
@@ -233,7 +240,6 @@ function toTranslationInput(draft: TranslationDraft) {
   };
 }
 
-/** Kategori seçeneklerini hiyerarşik girintiyle düzleştirir (TR adlarıyla) */
 function categoryOptions(categories: AdminCategory[]): { id: number; label: string }[] {
   const roots = categories.filter((c) => c.parentId === null);
   const result: { id: number; label: string }[] = [];

@@ -10,10 +10,6 @@ export interface ProductImageProps {
   height: number | null;
 }
 
-/**
- * Product aggregate'inin child entity'si — dışarıdan yalnızca
- * Product üzerinden değiştirilir, kendi repository'si yoktur.
- */
 export class ProductImage extends Entity {
   filePath: string;
   externalId: string | null;

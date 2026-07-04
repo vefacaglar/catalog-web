@@ -14,7 +14,7 @@ export class ProductTranslation {
 
   constructor(props: ProductTranslationProps) {
     if (!props.name.trim()) {
-      throw new ValidationError('Ürün adı boş olamaz');
+      throw new ValidationError('Product name cannot be empty');
     }
     this.name = props.name.trim();
     this.slug = props.slug;

@@ -1,10 +1,6 @@
 import { ConflictError } from '../../../../shared/domain/errors.js';
 import { Slug } from '../../domain/shared/slug.js';
 
-/**
- * Slug çözümü: kullanıcı slug verdiyse aynen kullanılır (doluysa hata);
- * verilmediyse isimden üretilir, çakışırsa -2, -3... eklenir.
- */
 export async function resolveUniqueSlug(
   name: string,
   providedSlug: string | undefined,
@@ -13,7 +9,7 @@ export async function resolveUniqueSlug(
   if (providedSlug !== undefined && providedSlug !== '') {
     const slug = Slug.create(providedSlug);
     if (await isTaken(slug.value)) {
-      throw new ConflictError(`"${slug.value}" slug'ı zaten kullanımda`);
+      throw new ConflictError(`Slug "${slug.value}" is already in use`);
     }
     return slug;
   }
@@ -25,5 +21,5 @@ export async function resolveUniqueSlug(
     const candidate = base.withSuffix(n);
     if (!(await isTaken(candidate.value))) return candidate;
   }
-  throw new ConflictError(`"${base.value}" için benzersiz slug üretilemedi`);
+  throw new ConflictError(`Could not generate a unique slug for "${base.value}"`);
 }

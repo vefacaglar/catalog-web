@@ -1,8 +1,3 @@
-/**
- * Görsel URL kurulumu — sağlayıcıya özgü tek nokta.
- * ImageKit delivery transformation'ları yalnızca burada bilinir;
- * sağlayıcı değişirse bu dosya güncellenir.
- */
 
 const IMAGEKIT_URL = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT ?? '';
 

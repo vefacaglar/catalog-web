@@ -13,10 +13,6 @@ import {
 } from '@catalog/contracts';
 import { z, type ZodType } from 'zod';
 
-/**
- * Admin UI'ın tarayıcıdan Fastify'a doğrudan eriştiği istemci.
- * Oturum httpOnly cookie'de olduğu için tüm istekler credentials ile gider.
- */
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 export class AdminApiError extends Error {
@@ -47,7 +43,7 @@ async function request<T>(
     const message =
       body !== null && typeof body === 'object' && 'message' in body
         ? String((body as { message: unknown }).message)
-        : `İstek başarısız (${res.status})`;
+        : `Request failed (${res.status})`;
     throw new AdminApiError(res.status, message);
   }
   return schema.parse(body);
@@ -55,7 +51,6 @@ async function request<T>(
 
 const successSchema = z.object({ success: z.boolean() });
 
-// --- Auth ---
 export const login = (input: LoginInput): Promise<CurrentUser> =>
   request('/auth/login', currentUserSchema, { method: 'POST', body: JSON.stringify(input) });
 
@@ -64,7 +59,6 @@ export const logout = (): Promise<{ success: boolean }> =>
 
 export const getMe = (): Promise<CurrentUser> => request('/auth/me', currentUserSchema);
 
-// --- Kategoriler ---
 export const listCategories = (): Promise<AdminCategory[]> =>
   request('/admin/categories', adminCategoryListSchema);
 
@@ -83,7 +77,6 @@ export const updateCategory = (id: number, input: CategoryUpsertInput): Promise<
 export const deleteCategory = (id: number): Promise<{ success: boolean }> =>
   request(`/admin/categories/${id}`, successSchema, { method: 'DELETE' });
 
-// --- Ürünler ---
 export const listProducts = (params: { page?: number; search?: string } = {}) => {
   const qs = new URLSearchParams();
   if (params.page) qs.set('page', String(params.page));
@@ -110,7 +103,6 @@ export const updateProduct = (id: number, input: ProductUpsertInput): Promise<Ad
 export const deleteProduct = (id: number): Promise<{ success: boolean }> =>
   request(`/admin/products/${id}`, successSchema, { method: 'DELETE' });
 
-// --- Ürün görselleri ---
 export async function uploadProductImage(productId: number, file: File) {
   const formData = new FormData();
   formData.append('file', file);
@@ -124,7 +116,7 @@ export async function uploadProductImage(productId: number, file: File) {
     const message =
       body !== null && typeof body === 'object' && 'message' in body
         ? String((body as { message: unknown }).message)
-        : `Yükleme başarısız (${res.status})`;
+        : `Upload failed (${res.status})`;
     throw new AdminApiError(res.status, message);
   }
   return body;

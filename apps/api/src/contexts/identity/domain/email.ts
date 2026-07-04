@@ -11,7 +11,7 @@ export class Email extends ValueObject<{ value: string }> {
   static create(value: string): Email {
     const normalized = value.trim().toLowerCase();
     if (!EMAIL_PATTERN.test(normalized)) {
-      throw new ValidationError(`Geçersiz e-posta adresi: ${value}`);
+      throw new ValidationError(`Invalid email address: ${value}`);
     }
     return new Email(normalized);
   }

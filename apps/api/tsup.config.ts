@@ -6,6 +6,5 @@ export default defineConfig({
   target: 'node22',
   clean: true,
   sourcemap: true,
-  // workspace paketleri (@catalog/*) kaynak .ts olarak geldiği için bundle'a dahil edilir
   noExternal: [/^@catalog\//],
 });

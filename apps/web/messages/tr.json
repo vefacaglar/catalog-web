@@ -46,5 +46,99 @@
     "title": "Sayfa bulunamadı",
     "description": "Aradığınız sayfa taşınmış veya kaldırılmış olabilir.",
     "backHome": "Ana sayfaya dön"
+  },
+  "admin": {
+    "nav": {
+      "title": "Katalog Admin",
+      "products": "Ürünler",
+      "categories": "Kategoriler",
+      "viewSite": "Siteyi Görüntüle ↗",
+      "logout": "Çıkış Yap"
+    },
+    "common": {
+      "loading": "Yükleniyor...",
+      "create": "Oluştur",
+      "update": "Güncelle",
+      "saving": "Kaydediliyor...",
+      "cancel": "Vazgeç",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "active": "Aktif",
+      "inactive": "Pasif",
+      "status": "Durum",
+      "actions": "İşlem",
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "page": "Sayfa {page} / {total}",
+      "loadFailed": "Yüklenemedi",
+      "saveFailed": "Kaydedilemedi",
+      "deleteFailed": "Silinemedi"
+    },
+    "login": {
+      "title": "Yönetim Paneli",
+      "subtitle": "Devam etmek için giriş yapın",
+      "email": "E-posta",
+      "password": "Şifre",
+      "submit": "Giriş Yap",
+      "submitting": "Giriş yapılıyor...",
+      "noAccess": "Bu hesabın yönetim paneline erişim yetkisi yok",
+      "failed": "Giriş yapılamadı"
+    },
+    "products": {
+      "title": "Ürünler",
+      "new": "+ Yeni Ürün",
+      "searchPlaceholder": "Ürün ara...",
+      "nameTr": "Ad (TR)",
+      "sku": "SKU",
+      "images": "Görsel",
+      "featuredBadge": "Öne çıkan",
+      "empty": "Ürün bulunamadı",
+      "deleteConfirm": "\"{name}\" silinsin mi? Bu işlem geri alınamaz.",
+      "newTitle": "Yeni Ürün",
+      "editTitle": "Ürünü Düzenle: {name}",
+      "needCategory": "Ürün eklemeden önce en az bir kategori oluşturmalısınız."
+    },
+    "categories": {
+      "title": "Kategoriler",
+      "new": "+ Yeni Kategori",
+      "nameTr": "Ad (TR)",
+      "slugTr": "Slug (TR)",
+      "empty": "Kategori yok",
+      "deleteConfirm": "\"{name}\" kategorisi silinsin mi?",
+      "newTitle": "Yeni Kategori",
+      "editTitle": "Kategoriyi Düzenle: {name}",
+      "notFound": "Kategori bulunamadı"
+    },
+    "form": {
+      "general": "Genel",
+      "content": "İçerik",
+      "category": "Kategori",
+      "sku": "Ürün Kodu (SKU)",
+      "sortOrder": "Sıra",
+      "active": "Aktif",
+      "featured": "Öne Çıkan",
+      "parent": "Üst Kategori",
+      "rootOption": "(Ana kategori)",
+      "name": "Ad ({locale})",
+      "slug": "Slug ({locale}) — boş bırakılırsa addan üretilir",
+      "slugPlaceholder": "ornek-urun-adi",
+      "description": "Açıklama ({locale})",
+      "nameRequired": "{locale} adı zorunlu"
+    },
+    "images": {
+      "title": "Görseller ({count})",
+      "upload": "+ Görsel Yükle",
+      "uploading": "Yükleniyor...",
+      "empty": "Henüz görsel yok. İlk yüklenen görsel kapak olur.",
+      "cover": "KAPAK",
+      "altTr": "Alt metin (TR)",
+      "altEn": "Alt text (EN)",
+      "moveUp": "Yukarı taşı",
+      "moveDown": "Aşağı taşı",
+      "deleteConfirm": "Görsel silinsin mi? Depolamadan da kaldırılır.",
+      "uploadFailed": "Yükleme başarısız",
+      "reorderFailed": "Sıralama kaydedilemedi",
+      "altSaveFailed": "Alt metin kaydedilemedi"
+    }
   }
 }

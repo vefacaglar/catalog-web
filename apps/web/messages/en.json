@@ -46,5 +46,99 @@
     "title": "Page not found",
     "description": "The page you are looking for may have been moved or removed.",
     "backHome": "Back to home"
+  },
+  "admin": {
+    "nav": {
+      "title": "Catalog Admin",
+      "products": "Products",
+      "categories": "Categories",
+      "viewSite": "View Site ↗",
+      "logout": "Log Out"
+    },
+    "common": {
+      "loading": "Loading...",
+      "create": "Create",
+      "update": "Update",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "active": "Active",
+      "inactive": "Inactive",
+      "status": "Status",
+      "actions": "Actions",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page} / {total}",
+      "loadFailed": "Failed to load",
+      "saveFailed": "Failed to save",
+      "deleteFailed": "Failed to delete"
+    },
+    "login": {
+      "title": "Admin Panel",
+      "subtitle": "Sign in to continue",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign In",
+      "submitting": "Signing in...",
+      "noAccess": "This account is not allowed to access the admin panel",
+      "failed": "Sign in failed"
+    },
+    "products": {
+      "title": "Products",
+      "new": "+ New Product",
+      "searchPlaceholder": "Search products...",
+      "nameTr": "Name (TR)",
+      "sku": "SKU",
+      "images": "Images",
+      "featuredBadge": "Featured",
+      "empty": "No products found",
+      "deleteConfirm": "Delete \"{name}\"? This action cannot be undone.",
+      "newTitle": "New Product",
+      "editTitle": "Edit Product: {name}",
+      "needCategory": "Create at least one category before adding products."
+    },
+    "categories": {
+      "title": "Categories",
+      "new": "+ New Category",
+      "nameTr": "Name (TR)",
+      "slugTr": "Slug (TR)",
+      "empty": "No categories",
+      "deleteConfirm": "Delete the \"{name}\" category?",
+      "newTitle": "New Category",
+      "editTitle": "Edit Category: {name}",
+      "notFound": "Category not found"
+    },
+    "form": {
+      "general": "General",
+      "content": "Content",
+      "category": "Category",
+      "sku": "SKU",
+      "sortOrder": "Sort Order",
+      "active": "Active",
+      "featured": "Featured",
+      "parent": "Parent Category",
+      "rootOption": "(Root category)",
+      "name": "Name ({locale})",
+      "slug": "Slug ({locale}) — generated from the name if left empty",
+      "slugPlaceholder": "example-product-name",
+      "description": "Description ({locale})",
+      "nameRequired": "{locale} name is required"
+    },
+    "images": {
+      "title": "Images ({count})",
+      "upload": "+ Upload Image",
+      "uploading": "Uploading...",
+      "empty": "No images yet. The first uploaded image becomes the cover.",
+      "cover": "COVER",
+      "altTr": "Alt text (TR)",
+      "altEn": "Alt text (EN)",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "deleteConfirm": "Delete this image? It will also be removed from storage.",
+      "uploadFailed": "Upload failed",
+      "reorderFailed": "Failed to save order",
+      "altSaveFailed": "Failed to save alt text"
+    }
   }
 }

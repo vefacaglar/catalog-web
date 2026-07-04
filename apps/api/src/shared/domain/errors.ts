@@ -17,7 +17,7 @@ export class UnauthorizedError extends DomainError {
   readonly code = 'UNAUTHORIZED';
   readonly statusCode = 401;
 
-  constructor(message = 'Kimlik doğrulama gerekli') {
+  constructor(message = 'Authentication required') {
     super(message);
   }
 }
@@ -26,7 +26,7 @@ export class ForbiddenError extends DomainError {
   readonly code = 'FORBIDDEN';
   readonly statusCode = 403;
 
-  constructor(message = 'Bu işlem için yetkiniz yok') {
+  constructor(message = 'You are not allowed to perform this action') {
     super(message);
   }
 }

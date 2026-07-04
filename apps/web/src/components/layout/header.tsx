@@ -35,7 +35,6 @@ export async function Header() {
               {t('common.callUs')}
             </a>
           )}
-          {/* useSearchParams kullandığı için prerender'da Suspense sınırı gerekli */}
           <Suspense fallback={null}>
             <LocaleSwitcher />
           </Suspense>

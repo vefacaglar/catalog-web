@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminCategory } from '@catalog/contracts';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -8,6 +9,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { AdminApiError, deleteCategory, listCategories } from '@/lib/admin-api';
 
 export default function AdminCategoriesPage() {
+  const t = useTranslations('admin.categories');
+  const tc = useTranslations('admin.common');
   const router = useRouter();
   const [categories, setCategories] = useState<AdminCategory[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -21,21 +24,21 @@ export default function AdminCategoriesPage() {
         router.push('/admin/login');
         return;
       }
-      setError(err instanceof Error ? err.message : 'Yüklenemedi');
+      setError(err instanceof Error ? err.message : tc('loadFailed'));
     }
-  }, [router]);
+  }, [router, tc]);
 
   useEffect(() => {
     void load();
   }, [load]);
 
   async function handleDelete(category: AdminCategory) {
-    if (!confirm(`"${category.translations.tr.name}" kategorisi silinsin mi?`)) return;
+    if (!confirm(t('deleteConfirm', { name: category.translations.tr.name }))) return;
     try {
       await deleteCategory(category.id);
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Silinemedi');
+      setError(err instanceof Error ? err.message : tc('deleteFailed'));
     }
   }
 
@@ -45,28 +48,28 @@ export default function AdminCategoriesPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Kategoriler</h1>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
         <Link
           href="/admin/categories/new"
           className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-700"
         >
-          + Yeni Kategori
+          {t('new')}
         </Link>
       </div>
 
       {error && <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
 
       {categories === null ? (
-        <p className="mt-8 text-sm text-zinc-500">Yükleniyor...</p>
+        <p className="mt-8 text-sm text-zinc-500">{tc('loading')}</p>
       ) : (
         <div className="mt-4 overflow-hidden rounded-xl border border-zinc-200 bg-white">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-500">
               <tr>
-                <th className="px-4 py-3">Ad (TR)</th>
-                <th className="px-4 py-3">Slug (TR)</th>
-                <th className="px-4 py-3">Durum</th>
-                <th className="px-4 py-3 text-right">İşlem</th>
+                <th className="px-4 py-3">{t('nameTr')}</th>
+                <th className="px-4 py-3">{t('slugTr')}</th>
+                <th className="px-4 py-3">{tc('status')}</th>
+                <th className="px-4 py-3 text-right">{tc('actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -84,7 +87,7 @@ export default function AdminCategoriesPage() {
               {categories.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-4 py-8 text-center text-zinc-500">
-                    Kategori yok
+                    {t('empty')}
                   </td>
                 </tr>
               )}
@@ -105,6 +108,8 @@ function CategoryRow({
   depth: number;
   onDelete: (category: AdminCategory) => void;
 }) {
+  const tc = useTranslations('admin.common');
+
   return (
     <tr className="border-b border-zinc-100 last:border-0">
       <td className="px-4 py-3 font-medium">
@@ -116,9 +121,9 @@ function CategoryRow({
       <td className="px-4 py-3 font-mono text-xs">{category.translations.tr.slug}</td>
       <td className="px-4 py-3">
         {category.isActive ? (
-          <span className="text-emerald-600">Aktif</span>
+          <span className="text-emerald-600">{tc('active')}</span>
         ) : (
-          <span className="text-zinc-400">Pasif</span>
+          <span className="text-zinc-400">{tc('inactive')}</span>
         )}
       </td>
       <td className="px-4 py-3 text-right">
@@ -126,13 +131,13 @@ function CategoryRow({
           href={`/admin/categories/${category.id}`}
           className="font-semibold text-blue-600 hover:underline"
         >
-          Düzenle
+          {tc('edit')}
         </Link>
         <button
           onClick={() => onDelete(category)}
           className="ml-4 font-semibold text-red-600 hover:underline"
         >
-          Sil
+          {tc('delete')}
         </button>
       </td>
     </tr>

@@ -15,7 +15,7 @@ export class GetProductBySlug implements UseCase<GetProductBySlugInput, ProductD
   async execute({ locale, slug }: GetProductBySlugInput): Promise<ProductDetail> {
     const product = await this.queryService.getProductBySlug(locale, slug);
     if (!product) {
-      throw new NotFoundError(`Ürün bulunamadı: ${slug}`);
+      throw new NotFoundError(`Product not found: ${slug}`);
     }
     return product;
   }

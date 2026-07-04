@@ -27,7 +27,7 @@ export class Slug extends ValueObject<{ value: string }> {
   static create(value: string): Slug {
     if (!SLUG_PATTERN.test(value)) {
       throw new ValidationError(
-        `Geçersiz slug: "${value}". Yalnızca küçük harf, rakam ve tire kullanılabilir`,
+        `Invalid slug: "${value}". Only lowercase letters, digits and hyphens are allowed`,
       );
     }
     return new Slug(value);
@@ -44,7 +44,7 @@ export class Slug extends ValueObject<{ value: string }> {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
     if (!normalized) {
-      throw new ValidationError(`"${name}" isminden slug üretilemedi`);
+      throw new ValidationError(`Could not generate a slug from "${name}"`);
     }
     return new Slug(normalized);
   }

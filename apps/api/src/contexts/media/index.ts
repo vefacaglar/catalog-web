@@ -5,14 +5,6 @@ import type { ImageStorage } from './domain/image-storage.js';
 import { ImageKitStorage } from './infrastructure/imagekit.storage.js';
 import { UnconfiguredStorage } from './infrastructure/unconfigured.storage.js';
 
-/**
- * Media bounded context composition root'u.
- * Depolama adapter'ını kurar ve catalog'un yayınladığı event'lere abone olarak
- * sağlayıcıdaki dosya temizliğini üstlenir.
- *
- * Context sınırı: catalog'un domain tiplerini import etmez — event'lere isim
- * üzerinden abone olur, payload'ı yapısal olarak okur.
- */
 export function createImageStorage(config: AppConfig, app: FastifyInstance): ImageStorage {
   if (config.IMAGEKIT_PUBLIC_KEY && config.IMAGEKIT_PRIVATE_KEY && config.IMAGEKIT_URL_ENDPOINT) {
     return new ImageKitStorage({
@@ -21,7 +13,7 @@ export function createImageStorage(config: AppConfig, app: FastifyInstance): Ima
       urlEndpoint: config.IMAGEKIT_URL_ENDPOINT,
     });
   }
-  app.log.warn('ImageKit yapılandırılmamış — görsel yükleme devre dışı (503 döner)');
+  app.log.warn('ImageKit is not configured — image uploads are disabled (endpoint returns 503)');
   return new UnconfiguredStorage();
 }
 

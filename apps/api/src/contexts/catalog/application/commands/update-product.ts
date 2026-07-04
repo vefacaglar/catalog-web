@@ -23,11 +23,11 @@ export class UpdateProduct implements UseCase<UpdateProductInput, AdminProduct> 
   async execute(input: UpdateProductInput): Promise<AdminProduct> {
     const product = await this.products.findById(input.productId);
     if (!product) {
-      throw new NotFoundError(`Ürün bulunamadı: ${input.productId}`);
+      throw new NotFoundError(`Product not found: ${input.productId}`);
     }
     const category = await this.categories.findById(input.categoryId);
     if (!category) {
-      throw new NotFoundError(`Kategori bulunamadı: ${input.categoryId}`);
+      throw new NotFoundError(`Category not found: ${input.categoryId}`);
     }
 
     const translations = await buildProductTranslations(
@@ -48,7 +48,7 @@ export class UpdateProduct implements UseCase<UpdateProductInput, AdminProduct> 
     await this.events.dispatch(product.pullDomainEvents());
 
     const dto = await this.queryService.getAdminProduct(product.persistedId);
-    if (!dto) throw new Error('Ürün güncellendi ama okunamadı');
+    if (!dto) throw new Error('Product was updated but could not be read back');
     return dto;
   }
 }

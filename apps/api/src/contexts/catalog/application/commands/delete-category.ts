@@ -12,13 +12,13 @@ export class DeleteCategory implements UseCase<{ categoryId: number }, void> {
   async execute({ categoryId }: { categoryId: number }): Promise<void> {
     const category = await this.categories.findById(categoryId);
     if (!category) {
-      throw new NotFoundError(`Kategori bulunamadı: ${categoryId}`);
+      throw new NotFoundError(`Category not found: ${categoryId}`);
     }
     if (await this.categories.hasChildren(categoryId)) {
-      throw new ConflictError('Alt kategorileri olan kategori silinemez');
+      throw new ConflictError('A category with subcategories cannot be deleted');
     }
     if (await this.categories.hasProducts(categoryId)) {
-      throw new ConflictError('İçinde ürün olan kategori silinemez');
+      throw new ConflictError('A category containing products cannot be deleted');
     }
     category.markDeleted();
     await this.categories.delete(category);

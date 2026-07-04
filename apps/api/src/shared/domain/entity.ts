@@ -1,7 +1,3 @@
-/**
- * Kimliği DB tarafından (identity kolonu) atanan entity tabanı.
- * Yeni oluşturulan aggregate'lerde id, persist edilene kadar null'dır.
- */
 export abstract class Entity {
   protected constructor(private _id: number | null) {}
 
@@ -9,17 +5,16 @@ export abstract class Entity {
     return this._id;
   }
 
-  /** Persist sonrası DB'nin atadığı kimliği bağlar; yalnızca repository çağırır. */
   bindId(id: number): void {
     if (this._id !== null && this._id !== id) {
-      throw new Error(`Entity kimliği değiştirilemez (mevcut: ${this._id}, yeni: ${id})`);
+      throw new Error(`Entity id cannot be changed (current: ${this._id}, new: ${id})`);
     }
     this._id = id;
   }
 
   get persistedId(): number {
     if (this._id === null) {
-      throw new Error('Entity henüz persist edilmedi, kimliği yok');
+      throw new Error('Entity has not been persisted yet and has no id');
     }
     return this._id;
   }

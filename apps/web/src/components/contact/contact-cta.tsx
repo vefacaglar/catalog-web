@@ -7,7 +7,6 @@ interface ContactCtaProps {
   productUrl: string;
 }
 
-/** Telefonla satış modeli: ürün sayfasındaki ana aksiyon arama / WhatsApp */
 export async function ContactCta({ productName, productUrl }: ContactCtaProps) {
   const t = await getTranslations();
   if (!PHONE) return null;

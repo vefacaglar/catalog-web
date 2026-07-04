@@ -20,7 +20,6 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
   const product = await getProductBySlug(locale, slug);
   if (!product) return {};
 
-  // hreflang: her iki dildeki slug'larla alternatifler
   const languages = Object.fromEntries(
     Object.entries(product.slugs).map(([loc, s]) => [loc, `${SITE_URL}/${loc}/products/${s}`]),
   );

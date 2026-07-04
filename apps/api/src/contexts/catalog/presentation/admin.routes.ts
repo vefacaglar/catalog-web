@@ -49,10 +49,8 @@ export interface AdminRoutesDeps {
 
 export function buildAdminRoutes(deps: AdminRoutesDeps): FastifyPluginAsyncZod {
   return async (app) => {
-    // Tüm admin route'ları role=admin ister
     app.addHook('onRequest', app.requireRole('admin'));
 
-    // --- Kategoriler ---
     app.get(
       '/categories',
       { schema: { response: { 200: adminCategoryListSchema } } },
@@ -90,7 +88,6 @@ export function buildAdminRoutes(deps: AdminRoutesDeps): FastifyPluginAsyncZod {
       },
     );
 
-    // --- Ürünler ---
     app.get(
       '/products',
       {
@@ -115,7 +112,7 @@ export function buildAdminRoutes(deps: AdminRoutesDeps): FastifyPluginAsyncZod {
       { schema: { params: idParamSchema, response: { 200: adminProductSchema } } },
       async (request) => {
         const product = await deps.queryService.getAdminProduct(request.params.id);
-        if (!product) throw new NotFoundError(`Ürün bulunamadı: ${request.params.id}`);
+        if (!product) throw new NotFoundError(`Product not found: ${request.params.id}`);
         return product;
       },
     );
@@ -151,7 +148,6 @@ export function buildAdminRoutes(deps: AdminRoutesDeps): FastifyPluginAsyncZod {
       },
     );
 
-    // --- Ürün görselleri ---
     app.post(
       '/products/:id/images',
       {
@@ -163,7 +159,7 @@ export function buildAdminRoutes(deps: AdminRoutesDeps): FastifyPluginAsyncZod {
       async (request, reply) => {
         const file = await request.file();
         if (!file) {
-          throw new ValidationError('Dosya bulunamadı — multipart "file" alanı gerekli');
+          throw new ValidationError('No file found — a multipart "file" field is required');
         }
         const buffer = await file.toBuffer();
         const created = await deps.addProductImage.execute({

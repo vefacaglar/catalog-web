@@ -17,7 +17,7 @@ export class ReorderProductImages implements UseCase<ReorderProductImagesInput, 
   async execute({ productId, imageIds }: ReorderProductImagesInput): Promise<void> {
     const product = await this.products.findById(productId);
     if (!product) {
-      throw new NotFoundError(`Ürün bulunamadı: ${productId}`);
+      throw new NotFoundError(`Product not found: ${productId}`);
     }
     product.reorderImages(imageIds);
     await this.products.save(product);

@@ -13,7 +13,7 @@ import {
 } from './src/schema/index.js';
 
 const DATABASE_URL = process.env.DATABASE_URL;
-if (!DATABASE_URL) throw new Error('DATABASE_URL tanimli degil');
+if (!DATABASE_URL) throw new Error('DATABASE_URL is not set');
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@catalog.local';
 const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD ?? 'admin1234';
@@ -21,7 +21,6 @@ const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD ?? 'admin1234';
 const { db, client } = createDb(DATABASE_URL);
 
 async function main() {
-  // Dev seed — mevcut verileri temizleyip baştan kurar
   await db.delete(productImages);
   await db.delete(productTranslations);
   await db.delete(products);
@@ -32,7 +31,7 @@ async function main() {
 
   const [adminRole] = await db.insert(roles).values({ name: 'admin' }).returning();
   const [userRole] = await db.insert(roles).values({ name: 'user' }).returning();
-  if (!adminRole || !userRole) throw new Error('Rol seed edilemedi');
+  if (!adminRole || !userRole) throw new Error('Failed to seed roles');
 
   const passwordHash = await argon2.hash(ADMIN_PASSWORD);
   await db.insert(users).values({
@@ -41,15 +40,14 @@ async function main() {
     roleId: adminRole.id,
   });
 
-  // Kategoriler: Mobilya (üst) → Sandalyeler (alt), Aydınlatma
   const [furniture] = await db.insert(categories).values({ sortOrder: 0 }).returning();
-  if (!furniture) throw new Error('Kategori seed edilemedi');
+  if (!furniture) throw new Error('Failed to seed categories');
   const [chairs] = await db
     .insert(categories)
     .values({ parentId: furniture.id, sortOrder: 0 })
     .returning();
   const [lighting] = await db.insert(categories).values({ sortOrder: 1 }).returning();
-  if (!chairs || !lighting) throw new Error('Kategori seed edilemedi');
+  if (!chairs || !lighting) throw new Error('Failed to seed categories');
 
   await db.insert(categoryTranslations).values([
     { categoryId: furniture.id, locale: 'tr', name: 'Mobilya', slug: 'mobilya' },
@@ -169,7 +167,7 @@ async function main() {
         sortOrder: i,
       })
       .returning();
-    if (!product) throw new Error('Ürün seed edilemedi');
+    if (!product) throw new Error('Failed to seed product');
 
     await db.insert(productTranslations).values([
       { productId: product.id, locale: 'tr', ...p.tr },
@@ -178,7 +176,7 @@ async function main() {
   }
 
   console.log(
-    `Seed tamam: 2 rol, 1 admin (${ADMIN_EMAIL}), 3 kategori, ${seedProducts.length} ürün`,
+    `Seed complete: 2 roles, 1 admin (${ADMIN_EMAIL}), 3 categories, ${seedProducts.length} products`,
   );
 }
 

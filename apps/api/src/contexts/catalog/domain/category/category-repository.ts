@@ -11,7 +11,6 @@ export interface CategoryRepository {
   save(category: Category): Promise<void>;
   delete(category: Category): Promise<void>;
   isSlugTaken(locale: Locale, slug: string, excludeCategoryId?: number): Promise<boolean>;
-  /** Döngü ve hiyerarşi kontrolleri için hafif referans listesi */
   findAllRefs(): Promise<CategoryRef[]>;
   hasProducts(categoryId: number): Promise<boolean>;
   hasChildren(categoryId: number): Promise<boolean>;

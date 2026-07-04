@@ -30,7 +30,6 @@ export const categoryTreeQuerySchema = z.object({
 
 const categoryTranslationInputSchema = z.object({
   name: z.string().min(1).max(200),
-  // Boş bırakılırsa isimden üretilir
   slug: z.string().max(200).optional(),
   description: z.string().max(5000).nullable().optional(),
 });

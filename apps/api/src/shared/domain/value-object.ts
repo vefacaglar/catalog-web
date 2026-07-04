@@ -1,6 +1,3 @@
-/**
- * Değer nesnesi tabanı: kimliksiz, salt-okunur, yapısal eşitlik.
- */
 export abstract class ValueObject<T extends Record<string, unknown>> {
   protected readonly props: Readonly<T>;
 

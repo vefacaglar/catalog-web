@@ -49,13 +49,9 @@ export class Category extends AggregateRoot {
     return new Category(id, props);
   }
 
-  /**
-   * parentId döngü kontrolü (kendi alt ağacına taşınamaz) application
-   * katmanında ağaç bilgisiyle yapılır; burada yalnızca öz-referans engellenir.
-   */
   updateDetails(input: CategoryDetailsInput): void {
     if (input.parentId !== null && this.id !== null && input.parentId === this.id) {
-      throw new ValidationError('Kategori kendisinin alt kategorisi olamaz');
+      throw new ValidationError('A category cannot be its own parent');
     }
     this.parentId = input.parentId;
     this.sortOrder = input.sortOrder;

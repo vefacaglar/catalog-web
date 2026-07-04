@@ -7,7 +7,6 @@ interface CategoryPageProps {
   params: Promise<{ locale: Locale; slug: string }>;
 }
 
-/** Kategori sayfası = kategori filtreli ürün listesi */
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);

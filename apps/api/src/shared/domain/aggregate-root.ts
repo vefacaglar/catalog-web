@@ -8,7 +8,6 @@ export abstract class AggregateRoot extends Entity {
     this.domainEvents.push(event);
   }
 
-  /** Biriken event'leri döndürür ve temizler; commit sonrası dispatch için. */
   pullDomainEvents(): DomainEvent[] {
     const events = this.domainEvents;
     this.domainEvents = [];

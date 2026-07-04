@@ -25,16 +25,15 @@ export class AddProductImage implements UseCase<AddProductImageInput, AdminProdu
   async execute(input: AddProductImageInput): Promise<AdminProductImage> {
     if (!ALLOWED_MIME_TYPES.has(input.mimeType)) {
       throw new ValidationError(
-        `Desteklenmeyen dosya türü: ${input.mimeType}. JPEG, PNG, WebP veya AVIF yükleyin`,
+        `Unsupported file type: ${input.mimeType}. Upload JPEG, PNG, WebP or AVIF`,
       );
     }
 
     const product = await this.products.findById(input.productId);
     if (!product) {
-      throw new NotFoundError(`Ürün bulunamadı: ${input.productId}`);
+      throw new NotFoundError(`Product not found: ${input.productId}`);
     }
 
-    // Önce sağlayıcıya yükle; DB satırı upload başarılıysa yazılır.
     const stored = await this.storage.upload(input.buffer, {
       fileName: input.fileName,
       folder: `products/${product.persistedId}`,

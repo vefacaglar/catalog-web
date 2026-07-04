@@ -44,7 +44,6 @@ export const productDetailSchema = z.object({
   category: categoryRefSchema,
   breadcrumb: z.array(categoryRefSchema),
   images: z.array(productImageSchema),
-  // Locale switcher için: her iki dildeki slug'lar
   slugs: z.partialRecord(localeSchema, z.string()),
 });
 export type ProductDetail = z.infer<typeof productDetailSchema>;
@@ -55,7 +54,6 @@ export const productDetailQuerySchema = z.object({
 
 const productTranslationInputSchema = z.object({
   name: z.string().min(1).max(200),
-  // Boş bırakılırsa isimden üretilir
   slug: z.string().max(200).optional(),
   description: z.string().max(20000).nullable().optional(),
 });

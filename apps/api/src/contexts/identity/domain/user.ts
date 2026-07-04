@@ -4,7 +4,6 @@ import type { Email } from './email.js';
 export interface UserProps {
   email: Email;
   passwordHash: string;
-  /** roles tablosundaki rol adı (admin | user) */
   role: string;
   isActive: boolean;
   createdAt: Date;
