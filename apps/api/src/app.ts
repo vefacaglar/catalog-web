@@ -1,5 +1,6 @@
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
+import rateLimit from '@fastify/rate-limit';
 import Fastify from 'fastify';
 import {
   serializerCompiler,
@@ -51,6 +52,7 @@ export async function buildApp(config: AppConfig) {
   await app.register(multipart, {
     limits: { fileSize: 10 * 1024 * 1024, files: 1 },
   });
+  await app.register(rateLimit, { global: false });
 
   app.get('/health', async () => ({ status: 'ok' }));
 

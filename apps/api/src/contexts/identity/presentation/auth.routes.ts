@@ -16,6 +16,9 @@ export function buildAuthRoutes(deps: AuthRoutesDeps): FastifyPluginAsyncZod {
     app.post(
       '/auth/login',
       {
+        config: {
+          rateLimit: { max: 5, timeWindow: '1 minute' },
+        },
         schema: {
           body: loginSchema,
           response: { 200: currentUserSchema },
