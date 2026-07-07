@@ -49,3 +49,57 @@ Env files: `apps/api/.env`, `apps/web/.env.local`, `packages/db/.env` (see the `
 - Admin routes require `role=admin` (JWT in the `catalog_session` httpOnly cookie). Missing cookie → 401, wrong role → 403. The Next.js middleware redirect for `/admin` is UX only; the API is the security boundary.
 - Error responses use the shape `{ statusCode, code, message }` produced by the shared error handler; throw `DomainError` subclasses from `apps/api/src/shared/domain/errors.ts`.
 - After content mutations the API notifies `POST {web}/api/revalidate` (shared secret, cache tags `products` / `categories`); the 300s fetch revalidate window is the fallback.
+
+## Environment Variables
+
+All API env vars are validated at boot by `apps/api/src/config.ts` (zod, fail-fast). Empty strings are treated as unset.
+
+| Variable | App | Purpose |
+| --- | --- | --- |
+| `NODE_ENV` | api | `production` switches to JSON logs and `Secure` cookies |
+| `PORT`, `HOST` | api | Fastify listen address (default `3001` / `0.0.0.0`) |
+| `DATABASE_URL` | api, db | Postgres connection string (drizzle-kit reads it from `packages/db/.env`) |
+| `JWT_SECRET` | api | Signs session JWTs. Anyone holding it can forge admin tokens — most critical secret |
+| `COOKIE_SECRET` | api | `@fastify/cookie` signing secret |
+| `WEB_ORIGIN` | api | The only origin allowed by CORS with credentials |
+| `REVALIDATE_URL` | api | Web endpoint the API calls after content mutations |
+| `REVALIDATE_SECRET` | api, web | Shared secret for the revalidation webhook — must match in both apps |
+| `IMAGEKIT_PUBLIC_KEY` / `IMAGEKIT_PRIVATE_KEY` / `IMAGEKIT_URL_ENDPOINT` | api | Storage adapter credentials. Private key never reaches the browser. When unset, uploads return 503 |
+| `API_URL` / `NEXT_PUBLIC_API_URL` | web | API base URL for server-side / browser fetches |
+| `NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT` | web | Base for building image delivery URLs in `lib/image.ts` |
+| `NEXT_PUBLIC_CONTACT_PHONE` | web | E.164 phone. Empty = all contact UI (header button, product CTA, footer line) stays hidden |
+| `NEXT_PUBLIC_SITE_URL` | web | Canonical origin for metadata, hreflang and sitemap |
+| `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | db | Credentials for the seeded admin user |
+
+Secrets in `.env` files are dev-only values; regenerate all of them for production and never commit `.env` files.
+
+## Change Checklists
+
+Follow these whenever you extend the project. Skipping a step leaves stale caches, missing translations, or unvalidated config behind.
+
+**Adding a new bounded context / module (`apps/api/src/contexts/<name>`)**
+1. Create the four layers (`domain / application / infrastructure / presentation`) plus an `index.ts` composition root; register it in `app.ts` under the `/api/v1` scope.
+2. Guard non-public routes with `requireRole('admin')` (or `requireAuth`).
+3. If its mutations affect publicly rendered content: record domain events in the aggregate, then subscribe them in `apps/api/src/shared/infrastructure/revalidate-webhook.ts` with the right cache tags. A module whose changes never reach the public site needs no revalidation wiring.
+4. If it exposes data to the web app: define its cache tag(s), use them in `apps/web/src/lib/api.ts` fetches, and keep tag names consistent between webhook and fetches.
+
+**Adding/changing an entity or table**
+1. Update `packages/db/src/schema/`, run `pnpm db:generate`, commit the migration.
+2. Localized user-facing content gets a `<entity>_translations` table (`locale` enum, unique `(entityId, locale)`, unique `(locale, slug)` if routed) — both `tr` and `en` are mandatory on write, enforced via `TranslationSet` in the domain.
+3. Update `packages/contracts` schemas, repository/mapper, query service, and the seed script in `packages/db/seed.ts`.
+4. If the entity has public pages: add cache tags + revalidation subscriptions, and extend `apps/web/src/app/sitemap.ts`.
+
+**Adding an environment variable**
+1. Add it to the zod schema in `apps/api/src/config.ts` (or read it via `process.env` in web with a sensible default).
+2. Add it to the relevant `.env.example` file(s) with an English comment.
+3. If it affects build output, add it to `globalEnv` in `turbo.json`.
+4. Document it in the table above and, if deploy-relevant, in README's deployment notes.
+
+**Adding UI text**
+Add the key to BOTH `apps/web/messages/tr.json` and `en.json` (admin strings under the `admin` namespace). Never hardcode display text.
+
+**Adding a locale**
+Extend the `locale` pg enum (migration), `routing.ts` locales, add `messages/<locale>.json`, extend admin form tabs and `TranslationSet` locale list.
+
+**Seed script warning**
+`pnpm db:seed` is destructive: it wipes and recreates all rows. Never run it against a database holding real content.
