@@ -35,6 +35,7 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
   );
   const [sku, setSku] = useState(initial?.sku ?? '');
   const [isActive, setIsActive] = useState(initial?.isActive ?? true);
+  const [isAvailable, setIsAvailable] = useState(initial?.isAvailable ?? true);
   const [isFeatured, setIsFeatured] = useState(initial?.isFeatured ?? false);
   const [sortOrder, setSortOrder] = useState(initial?.sortOrder ?? 0);
   const [drafts, setDrafts] = useState<Record<LocaleTab, TranslationDraft>>({
@@ -74,6 +75,7 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
       categoryId,
       sku: sku.trim() || null,
       isActive,
+      isAvailable,
       isFeatured,
       sortOrder,
       translations: {
@@ -144,6 +146,14 @@ export function ProductForm({ categories, initial }: ProductFormProps) {
                 onChange={(e) => setIsActive(e.target.checked)}
               />
               {t('active')}
+            </label>
+            <label className="flex items-center gap-2 text-sm font-medium">
+              <input
+                type="checkbox"
+                checked={isAvailable}
+                onChange={(e) => setIsAvailable(e.target.checked)}
+              />
+              {t('available')}
             </label>
             <label className="flex items-center gap-2 text-sm font-medium">
               <input

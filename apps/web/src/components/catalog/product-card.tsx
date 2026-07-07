@@ -20,12 +20,21 @@ export function ProductCard({ product }: { product: ProductListItem }) {
             alt={product.coverImage.alt ?? product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition group-hover:scale-105"
+            className={
+              product.isAvailable
+                ? 'object-cover transition group-hover:scale-105'
+                : 'object-cover opacity-60 transition group-hover:scale-105'
+            }
           />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-zinc-400">
             {t('product.noImage')}
           </div>
+        )}
+        {!product.isAvailable && (
+          <span className="absolute left-2 top-2 rounded bg-zinc-900/80 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-white">
+            {t('product.unavailableBadge')}
+          </span>
         )}
       </div>
       <div className="p-3">

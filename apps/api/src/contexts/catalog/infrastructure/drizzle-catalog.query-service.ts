@@ -69,6 +69,7 @@ export class DrizzleCatalogQueryService implements CatalogQueryService {
       .select({
         id: products.id,
         sku: products.sku,
+        isAvailable: products.isAvailable,
         isFeatured: products.isFeatured,
         sortOrder: products.sortOrder,
         categoryId: products.categoryId,
@@ -88,7 +89,12 @@ export class DrizzleCatalogQueryService implements CatalogQueryService {
         ),
       )
       .where(where)
-      .orderBy(desc(products.isFeatured), asc(products.sortOrder), asc(products.id))
+      .orderBy(
+        desc(products.isAvailable),
+        desc(products.isFeatured),
+        asc(products.sortOrder),
+        asc(products.id),
+      )
       .limit(pageSize)
       .offset((page - 1) * pageSize);
 
@@ -102,6 +108,7 @@ export class DrizzleCatalogQueryService implements CatalogQueryService {
       name: row.name,
       slug: row.slug,
       sku: row.sku,
+      isAvailable: row.isAvailable,
       isFeatured: row.isFeatured,
       category: { id: row.categoryId, name: row.catName, slug: row.catSlug },
       coverImage: covers.get(row.id) ?? null,
@@ -152,6 +159,7 @@ export class DrizzleCatalogQueryService implements CatalogQueryService {
       slug: current.slug,
       description: current.description,
       sku: product.sku,
+      isAvailable: product.isAvailable,
       isFeatured: product.isFeatured,
       category,
       breadcrumb,
@@ -226,6 +234,7 @@ export class DrizzleCatalogQueryService implements CatalogQueryService {
       categoryId: product.categoryId,
       sku: product.sku,
       isActive: product.isActive,
+      isAvailable: product.isAvailable,
       isFeatured: product.isFeatured,
       sortOrder: product.sortOrder,
       translations: {

@@ -31,7 +31,9 @@
     "contactTitle": "Bu ürünle ilgileniyor musunuz?",
     "contactSubtitle": "Fiyat ve stok bilgisi için bizimle iletişime geçin.",
     "whatsappMessage": "Merhaba, {name} hakkında bilgi almak istiyorum: {url}",
-    "noImage": "Görsel yok"
+    "noImage": "Görsel yok",
+    "unavailableBadge": "Mevcut Değil",
+    "unavailableNote": "Bu ürün artık mevcut değildir; arşivimizde sergilenmektedir."
   },
   "pagination": {
     "previous": "Önceki",
@@ -65,6 +67,7 @@
       "delete": "Sil",
       "active": "Aktif",
       "inactive": "Pasif",
+      "unavailable": "Mevcut değil",
       "status": "Durum",
       "actions": "İşlem",
       "previous": "Önceki",
@@ -116,6 +119,7 @@
       "sku": "Ürün Kodu (SKU)",
       "sortOrder": "Sıra",
       "active": "Aktif",
+      "available": "Mevcut",
       "featured": "Öne Çıkan",
       "parent": "Üst Kategori",
       "rootOption": "(Ana kategori)",

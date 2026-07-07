@@ -61,6 +61,7 @@ async function main() {
   const seedProducts: {
     categoryId: number;
     isFeatured: boolean;
+    isAvailable?: boolean;
     sku: string;
     tr: { name: string; slug: string; description: string };
     en: { name: string; slug: string; description: string };
@@ -83,6 +84,7 @@ async function main() {
     {
       categoryId: chairs.id,
       isFeatured: false,
+      isAvailable: false,
       sku: 'CH-002',
       tr: {
         name: 'Metal Sandalye',
@@ -164,6 +166,7 @@ async function main() {
         categoryId: p.categoryId,
         sku: p.sku,
         isFeatured: p.isFeatured,
+        isAvailable: p.isAvailable ?? true,
         sortOrder: i,
       })
       .returning();

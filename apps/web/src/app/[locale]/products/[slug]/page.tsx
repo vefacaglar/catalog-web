@@ -111,6 +111,11 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               {product.category.name}
             </p>
             <h1 className="mt-1 text-3xl font-bold">{product.name}</h1>
+            {!product.isAvailable && (
+              <span className="mt-2 inline-block rounded bg-zinc-900 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+                {t('product.unavailableBadge')}
+              </span>
+            )}
             {product.sku && (
               <p className="mt-2 text-sm text-zinc-500">
                 {t('product.sku')}: <span className="font-mono">{product.sku}</span>
@@ -124,10 +129,16 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </p>
           )}
 
-          <ContactCta
-            productName={product.name}
-            productUrl={`${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/${locale}/products/${product.slug}`}
-          />
+          {product.isAvailable ? (
+            <ContactCta
+              productName={product.name}
+              productUrl={`${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/${locale}/products/${product.slug}`}
+            />
+          ) : (
+            <p className="rounded-xl border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
+              {t('product.unavailableNote')}
+            </p>
+          )}
         </div>
       </div>
     </div>

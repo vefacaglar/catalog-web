@@ -109,6 +109,11 @@ export default function AdminProductsPage() {
                     ) : (
                       <span className="text-zinc-400">{tc('inactive')}</span>
                     )}
+                    {!product.isAvailable && (
+                      <span className="ml-2 rounded bg-zinc-200 px-1.5 py-0.5 text-xs text-zinc-700">
+                        {tc('unavailable')}
+                      </span>
+                    )}
                   </td>
                   <td className="px-4 py-3">{product.images.length}</td>
                   <td className="px-4 py-3 text-right">

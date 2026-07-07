@@ -15,6 +15,7 @@ export interface ProductProps {
   categoryId: number;
   sku: string | null;
   isActive: boolean;
+  isAvailable: boolean;
   isFeatured: boolean;
   sortOrder: number;
   translations: TranslationSet<ProductTranslation>;
@@ -27,6 +28,7 @@ export interface ProductDetailsInput {
   categoryId: number;
   sku: string | null;
   isActive: boolean;
+  isAvailable: boolean;
   isFeatured: boolean;
   sortOrder: number;
   translations: TranslationSet<ProductTranslation>;
@@ -36,6 +38,7 @@ export class Product extends AggregateRoot {
   categoryId: number;
   sku: string | null;
   isActive: boolean;
+  isAvailable: boolean;
   isFeatured: boolean;
   sortOrder: number;
   translations: TranslationSet<ProductTranslation>;
@@ -48,6 +51,7 @@ export class Product extends AggregateRoot {
     this.categoryId = props.categoryId;
     this.sku = props.sku;
     this.isActive = props.isActive;
+    this.isAvailable = props.isAvailable;
     this.isFeatured = props.isFeatured;
     this.sortOrder = props.sortOrder;
     this.translations = props.translations;
@@ -80,6 +84,7 @@ export class Product extends AggregateRoot {
     this.categoryId = input.categoryId;
     this.sku = input.sku;
     this.isActive = input.isActive;
+    this.isAvailable = input.isAvailable;
     this.isFeatured = input.isFeatured;
     this.sortOrder = input.sortOrder;
     this.translations = input.translations;

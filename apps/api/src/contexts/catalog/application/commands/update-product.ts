@@ -39,6 +39,7 @@ export class UpdateProduct implements UseCase<UpdateProductInput, AdminProduct> 
       categoryId: input.categoryId,
       sku: input.sku ?? null,
       isActive: input.isActive,
+      isAvailable: input.isAvailable,
       isFeatured: input.isFeatured,
       sortOrder: input.sortOrder,
       translations,

@@ -8,6 +8,13 @@
       "when": 1783177615758,
       "tag": "0000_giant_odin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783416327483,
+      "tag": "0001_pink_dracula",
+      "breakpoints": true
     }
   ]
 }

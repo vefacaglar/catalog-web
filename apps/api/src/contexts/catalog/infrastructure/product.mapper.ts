@@ -25,6 +25,7 @@ export function toProductAggregate(
     categoryId: row.categoryId,
     sku: row.sku,
     isActive: row.isActive,
+    isAvailable: row.isAvailable,
     isFeatured: row.isFeatured,
     sortOrder: row.sortOrder,
     translations: TranslationSet.create({

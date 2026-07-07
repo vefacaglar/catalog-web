@@ -31,7 +31,9 @@
     "contactTitle": "Interested in this product?",
     "contactSubtitle": "Contact us for pricing and availability.",
     "whatsappMessage": "Hello, I would like to get information about {name}: {url}",
-    "noImage": "No image"
+    "noImage": "No image",
+    "unavailableBadge": "Not Available",
+    "unavailableNote": "This item is no longer available; it is kept on display in our archive."
   },
   "pagination": {
     "previous": "Previous",
@@ -65,6 +67,7 @@
       "delete": "Delete",
       "active": "Active",
       "inactive": "Inactive",
+      "unavailable": "Not available",
       "status": "Status",
       "actions": "Actions",
       "previous": "Previous",
@@ -116,6 +119,7 @@
       "sku": "SKU",
       "sortOrder": "Sort Order",
       "active": "Active",
+      "available": "Available",
       "featured": "Featured",
       "parent": "Parent Category",
       "rootOption": "(Root category)",

@@ -33,6 +33,7 @@ export class DrizzleProductRepository implements ProductRepository {
         categoryId: product.categoryId,
         sku: product.sku,
         isActive: product.isActive,
+        isAvailable: product.isAvailable,
         isFeatured: product.isFeatured,
         sortOrder: product.sortOrder,
         updatedAt: product.updatedAt,

@@ -14,6 +14,7 @@ export const productListItemSchema = z.object({
   name: z.string(),
   slug: z.string(),
   sku: z.string().nullable(),
+  isAvailable: z.boolean(),
   isFeatured: z.boolean(),
   category: categoryRefSchema,
   coverImage: productImageSchema.nullable(),
@@ -40,6 +41,7 @@ export const productDetailSchema = z.object({
   slug: z.string(),
   description: z.string().nullable(),
   sku: z.string().nullable(),
+  isAvailable: z.boolean(),
   isFeatured: z.boolean(),
   category: categoryRefSchema,
   breadcrumb: z.array(categoryRefSchema),
@@ -62,6 +64,7 @@ export const productUpsertSchema = z.object({
   categoryId: z.number().int(),
   sku: z.string().max(100).nullable().optional(),
   isActive: z.boolean().default(true),
+  isAvailable: z.boolean().default(true),
   isFeatured: z.boolean().default(false),
   sortOrder: z.number().int().default(0),
   translations: z.object({
@@ -76,6 +79,7 @@ export const adminProductSchema = z.object({
   categoryId: z.number().int(),
   sku: z.string().nullable(),
   isActive: z.boolean(),
+  isAvailable: z.boolean(),
   isFeatured: z.boolean(),
   sortOrder: z.number().int(),
   translations: z.object({
