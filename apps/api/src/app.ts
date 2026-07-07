@@ -41,6 +41,7 @@ export async function buildApp(config: AppConfig) {
   await app.register(cors, {
     origin: config.WEB_ORIGIN,
     credentials: true,
+    methods: ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE'],
   });
   await app.register(eventsPlugin);
   await app.register(dbPlugin, { connectionString: config.DATABASE_URL });
